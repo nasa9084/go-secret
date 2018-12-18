@@ -2,6 +2,7 @@ package secret_test
 
 import (
 	"bytes"
+	"errors"
 	"io/ioutil"
 	"log"
 	"os"
@@ -73,6 +74,18 @@ func TestEncrypter(t *testing.T) {
 
 	if !reflect.DeepEqual(encryptedData, buf.Bytes()) {
 		t.Error("encrypted data mismatched")
+		return
+	}
+}
+
+type cannotWriter struct{}
+
+func (w cannotWriter) Write([]byte) (int, error) { return -1, errors.New("cannot write") }
+
+func TestEncrypterCannotWrite(t *testing.T) {
+	var w cannotWriter
+	if err := secret.NewEncrypter(w).Encrypt(cfg, correctPass); err == nil {
+		t.Error("error should be occurred, but not")
 		return
 	}
 }
