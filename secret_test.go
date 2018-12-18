@@ -3,6 +3,7 @@ package secret_test
 import (
 	"bytes"
 	"log"
+	"os"
 	"testing"
 
 	secret "github.com/nasa9084/go-secret"
@@ -31,6 +32,20 @@ func TestEncrypterDecrypter(t *testing.T) {
 	}
 	if out.IntData != 1230 {
 		t.Errorf("out.IntData is not valid: %d != 1230", out.IntData)
+		return
+	}
+}
+
+func TestDecryptIncorrectPassword(t *testing.T) {
+	f, err := os.Open("testdata/encrypted_config.gpg")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer f.Close()
+
+	var cfg config
+	if err := secret.NewDecrypter(f).Decrypt(&cfg, "incorrect_passphrase"); err == nil {
+		t.Error("incorrect password error should be occurred, but not")
 		return
 	}
 }
