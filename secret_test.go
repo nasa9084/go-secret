@@ -66,7 +66,7 @@ func TestMain(m *testing.M) {
 
 func TestEncrypter(t *testing.T) {
 	var buf bytes.Buffer
-	if err := secret.NewEncrypter(&buf).Encrypt(cfg, "correct_passphrase"); err != nil {
+	if err := secret.NewEncrypter(&buf).Encrypt(cfg, correctPass); err != nil {
 		t.Error(err)
 		return
 	}
@@ -95,7 +95,7 @@ func TestDecrypter(t *testing.T) {
 
 func TestDecrypterIncorrectPassword(t *testing.T) {
 	var cfg config
-	if err := secret.NewDecrypter(bytes.NewReader(encryptedData)).Decrypt(&cfg, "incorrect_passphrase"); err == nil {
+	if err := secret.NewDecrypter(bytes.NewReader(encryptedData)).Decrypt(&cfg, incorrectPass); err == nil {
 		t.Error("incorrect password error should be occurred, but not")
 		return
 	}
