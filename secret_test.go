@@ -93,10 +93,18 @@ func TestDecrypter(t *testing.T) {
 	}
 }
 
-func TestDecryptIncorrectPassword(t *testing.T) {
+func TestDecrypterIncorrectPassword(t *testing.T) {
 	var cfg config
 	if err := secret.NewDecrypter(bytes.NewReader(encryptedData)).Decrypt(&cfg, "incorrect_passphrase"); err == nil {
 		t.Error("incorrect password error should be occurred, but not")
+		return
+	}
+}
+
+func TestDecrypterNotPointer(t *testing.T) {
+	var cfg config
+	if err := secret.NewDecrypter(bytes.NewReader(encryptedData)).Decrypt(cfg, correctPass); err == nil {
+		t.Error("not pointer error should be occurred, but not")
 		return
 	}
 }
