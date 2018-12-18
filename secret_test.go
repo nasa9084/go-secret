@@ -43,8 +43,8 @@ func (r constantReader) Read(p []byte) (int, error) {
 var encryptedData []byte
 
 func setup() {
-	secret.TimeFunc = timeFunc
-	secret.Rand = constantReader{'a'}
+	secret.SetTimeFunc(timeFunc)
+	secret.SetRand(constantReader{'a'})
 
 	f, err := os.Open("testdata/encrypted_config.gpg")
 	if err != nil {
