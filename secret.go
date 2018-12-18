@@ -7,9 +7,23 @@ import (
 	"io"
 	"reflect"
 	"sync"
+	"time"
 
 	"golang.org/x/crypto/openpgp"
+	"golang.org/x/crypto/openpgp/packet"
 )
+
+// TimeFunc is used for encryption.
+// Basically, you should NOT touch this.
+// This  variable is just for testing purpose.
+// See also Config.Time in https://godoc.org/golang.org/x/crypto/openpgp/packet#Config
+var TimeFunc func() time.Time
+
+// Rand is used for encryption.
+// Basically, you should NOT touch this.
+// This  variable is just for testing purpose.
+// See also Config.Rand in https://godoc.org/golang.org/x/crypto/openpgp/packet#Config
+var Rand io.Reader
 
 type encryptState struct {
 	bytes.Buffer
@@ -31,7 +45,7 @@ func (e *encryptState) encrypt(v interface{}, passphrase string) error {
 	if err := json.NewEncoder(&buf).Encode(v); err != nil {
 		return err
 	}
-	w, err := openpgp.SymmetricallyEncrypt(e, []byte(passphrase), nil, nil)
+	w, err := openpgp.SymmetricallyEncrypt(e, []byte(passphrase), nil, &packet.Config{Rand: Rand, Time: TimeFunc})
 	if err != nil {
 		return err
 	}
