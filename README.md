@@ -1,7 +1,7 @@
 go-secret
 =========
 [![Build Status](https://travis-ci.org/nasa9084/go-secret.svg?branch=master)](https://travis-ci.org/nasa9084/go-secret)
-
+[![GoDoc](https://godoc.org/github.com/nasa9084/go-secret?status.svg)](https://godoc.org/github.com/nasa9084/go-secret)
 
 Symmetrically encrypt and decrypt with passphrase using OpenPGP
 
